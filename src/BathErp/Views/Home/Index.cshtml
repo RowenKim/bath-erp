@@ -42,7 +42,7 @@
     <div class="grid">
         <section class="card">
             <h2>재고 <small>MM</small></h2>
-            <table>
+            <div class="tbl"><table>
                 <thead><tr><th>품목</th><th class="num">재고</th><th class="num">수불 합계</th><th>정합성</th></tr></thead>
                 <tbody>
                 @foreach (var s in Model.Stocks)
@@ -56,12 +56,12 @@
                     </tr>
                 }
                 </tbody>
-            </table>
+            </table></div>
         </section>
 
         <section class="card">
             <h2>주문 <small>SD</small></h2>
-            <table>
+            <div class="tbl"><table>
                 <thead><tr><th>주문번호</th><th>거래처</th><th>품목</th><th class="num">수량</th><th class="num">금액</th></tr></thead>
                 <tbody>
                 @if (Model.Orders.Count == 0)
@@ -76,12 +76,12 @@
                     </tr>
                 }
                 </tbody>
-            </table>
+            </table></div>
         </section>
 
         <section class="card">
             <h2>매출 전표 <small>FI</small></h2>
-            <table>
+            <div class="tbl"><table>
                 <thead><tr><th>전표번호</th><th>주문</th><th>계정</th><th class="num">차변</th><th class="num">대변</th></tr></thead>
                 <tbody>
                 @if (Model.Vouchers.Count == 0)
@@ -97,12 +97,12 @@
                     </tr>
                 }
                 </tbody>
-            </table>
+            </table></div>
         </section>
 
         <section class="card">
             <h2>인터페이스 로그</h2>
-            <table>
+            <div class="tbl"><table>
                 <thead><tr><th>일자</th><th>구분</th><th>결과</th><th>내용</th></tr></thead>
                 <tbody>
                 @if (Model.Logs.Count == 0)
@@ -118,7 +118,7 @@
                     </tr>
                 }
                 </tbody>
-            </table>
+            </table></div>
         </section>
     </div>
 

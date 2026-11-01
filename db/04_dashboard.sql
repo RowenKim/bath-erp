@@ -21,22 +21,22 @@ BEGIN
            ON t.item_code = i.item_code
     ORDER BY i.item_code;
 
-    -- 2) 최근 주문 10건
-    SELECT TOP 10 m.order_no, c.cust_name, d.item_code, d.qty, m.total_amount, m.status, m.created_at
+    -- 2) 최근 주문 50건
+    SELECT TOP 50 m.order_no, c.cust_name, d.item_code, d.qty, m.total_amount, m.status, m.created_at
     FROM dbo.ORDER_MST m
     JOIN dbo.ORDER_DTL d ON d.order_no = m.order_no AND d.line_no = 1
     JOIN dbo.CUSTOMER c  ON c.cust_code = m.cust_code
     ORDER BY m.created_at DESC;
 
-    -- 3) 최근 전표 분개 10줄
-    SELECT TOP 10 v.voucher_no, v.order_no, a.account_name, d.debit, d.credit
+    -- 3) 최근 전표 분개 100줄 (전표 1건당 2줄)
+    SELECT TOP 100 v.voucher_no, v.order_no, a.account_name, d.debit, d.credit
     FROM dbo.VOUCHER_MST v
     JOIN dbo.VOUCHER_DTL d ON d.voucher_no = v.voucher_no
     JOIN dbo.ACCOUNT a     ON a.account_code = d.account_code
     ORDER BY v.voucher_no DESC, d.line_no;
 
-    -- 4) 최근 로그 10건
-    SELECT TOP 10 log_id, ref_no, action, result, message, created_at
+    -- 4) 최근 로그 50건
+    SELECT TOP 50 log_id, ref_no, action, result, message, created_at
     FROM dbo.IF_LOG
     ORDER BY log_id DESC;
 END
