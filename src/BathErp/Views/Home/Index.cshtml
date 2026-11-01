@@ -1,0 +1,136 @@
+@* Razor 화면 — HTML 안에 @로 C#을 섞어 씀 (JSP의 <% %>, ${} 와 같은 역할)
+   이렇게 골뱅이+별표로 감싼 부분은 Razor 주석이라 브라우저로 보내지는 HTML에는 남지 않아요. *@
+
+@* @model = "이 화면은 DashboardVm 타입의 데이터를 받는다"는 선언.
+   HomeController의 return View(vm); 에서 넘긴 vm 을 아래에서 Model 이라는 이름으로 써요. *@
+@model DashboardVm
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BathERP 주문·전표 연동 데모</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<main>
+    <header class="top">
+        <h1>BathERP 주문·전표 연동 데모</h1>
+        <span class="sub">C# · ASP.NET Core · MSSQL 저장 프로시저</span>
+    </header>
+
+    <section class="card">
+        <div class="form">
+            <select id="cust" aria-label="거래처">
+                <option value="C001">서울대리점</option>
+                <option value="C002">부산대리점</option>
+            </select>
+            <select id="item" aria-label="품목">
+                @* @foreach = C#의 반복문. Model.Stocks(재고 리스트)를 한 줄씩 돌면서 <option>을 만들어요.
+                   s 는 매번 꺼내는 StockRow 하나, @s.ItemCode 는 그 값을 HTML에 출력 *@
+                @foreach (var s in Model.Stocks)
+                {
+                    <option value="@s.ItemCode">@s.ItemCode @s.ItemName</option>
+                }
+            </select>
+            <input id="qty" type="number" min="1" value="10" aria-label="수량">
+            <button id="orderBtn" class="primary">주문 등록</button>
+        </div>
+        <div id="banner" class="banner" hidden></div>
+    </section>
+
+    <div class="grid">
+        <section class="card">
+            <h2>재고 <small>MM</small></h2>
+            <table>
+                <thead><tr><th>품목</th><th class="num">재고</th><th class="num">수불 합계</th><th>정합성</th></tr></thead>
+                <tbody>
+                @foreach (var s in Model.Stocks)
+                {
+                    <tr>
+                        <td>@s.ItemCode @s.ItemName</td>
+                        <td class="num">@s.Qty</td>
+                        <td class="num">@s.TxnSum</td>
+                        @* @( ... ) = 괄호 안의 C# 식 결과를 출력. 조건 ? 참 : 거짓 은 삼항 연산자 *@
+                        <td>@(s.Qty == s.TxnSum ? "일치" : "불일치")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>주문 <small>SD</small></h2>
+            <table>
+                <thead><tr><th>주문번호</th><th>거래처</th><th>품목</th><th class="num">수량</th><th class="num">금액</th></tr></thead>
+                <tbody>
+                @if (Model.Orders.Count == 0)
+                {
+                    <tr><td colspan="5" class="empty">아직 주문이 없어요</td></tr>
+                }
+                @foreach (var o in Model.Orders)
+                {
+                    <tr>
+                        <td>@o.OrderNo</td><td>@o.CustName</td><td>@o.ItemCode</td>
+                        <td class="num">@o.Qty</td><td class="num">@o.Amount.ToString("N0")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>매출 전표 <small>FI</small></h2>
+            <table>
+                <thead><tr><th>전표번호</th><th>주문</th><th>계정</th><th class="num">차변</th><th class="num">대변</th></tr></thead>
+                <tbody>
+                @if (Model.Vouchers.Count == 0)
+                {
+                    <tr><td colspan="5" class="empty">아직 전표가 없어요</td></tr>
+                }
+                @foreach (var v in Model.Vouchers)
+                {
+                    <tr>
+                        <td>@v.VoucherNo</td><td>@v.OrderNo</td><td>@v.AccountName</td>
+                        <td class="num">@(v.Debit == 0 ? "" : v.Debit.ToString("N0"))</td>
+                        <td class="num">@(v.Credit == 0 ? "" : v.Credit.ToString("N0"))</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>인터페이스 로그</h2>
+            <table>
+                <thead><tr><th>시각</th><th>구분</th><th>결과</th><th>내용</th></tr></thead>
+                <tbody>
+                @if (Model.Logs.Count == 0)
+                {
+                    <tr><td colspan="4" class="empty">아직 로그가 없어요</td></tr>
+                }
+                @foreach (var l in Model.Logs)
+                {
+                    <tr>
+                        <td>@l.CreatedAt.ToString("HH:mm:ss")</td><td>@l.Action</td>
+                        <td class="res-@l.Result">@l.Result</td>
+                        <td class="log-msg">@l.RefNo @l.Message</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </section>
+    </div>
+</main>
+
+<div id="overlay" class="overlay" hidden>
+    <div class="dialog">
+        <p id="ovTitle" class="ov-title">생산팀 작업 중</p>
+        <p id="ovText" class="ov-text"></p>
+        <div class="bar"><div id="ovBar"></div></div>
+    </div>
+</div>
+
+<script src="/js/site.js"></script>
+</body>
+</html>
