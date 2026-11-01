@@ -16,12 +16,13 @@ services:
       - ./db:/db:ro                  # SQL 스크립트를 컨테이너 안 /db 에서 실행
 
   app:
+    image: bath-erp-app:latest       # 맥에서 만든 이미지를 서버로 보내면 빌드 없이 이걸 사용
     build: .
     profiles: ["app"]
     environment:
       ConnectionStrings__BathErp: "Server=db,1433;Database=BathErp;User Id=sa;Password=BathErp!2026;TrustServerCertificate=True;"
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"        # 서버 내부 전용. 외부는 Nginx(80/443)를 거쳐서만 들어오게
     depends_on:
       - db
 
