@@ -3,7 +3,7 @@
 **데모: https://erp.jongwonkim.dev**
 
 C#을 처음 써보면서, 채용공고의 UNI ERP 업무(FI·SD·MM, MSSQL 저장 프로시저, 연계 인터페이스, 정합성)를
-가장 작은 흐름 하나로 직접 구현해본 학습 프로젝트입니다. (2026년 10월 31일 ~ 11월 1일, 주말 이틀)
+가장 작은 흐름 하나로 직접 구현해본 학습 프로젝트입니다. (2026년 11월 01일)
 
 ## 만든 방식
 
@@ -50,11 +50,8 @@ bath-ERP/
 
 ## 직접 작성하는 부분 ★
 
-1. `db/03_procedures.sql` 의 `usp_Order_Process` → 그다음 `usp_Production_Complete`
+1. `db/03_procedures.sql` 의 `usp_Order_Process`
 2. `src/BathErp/Services/OrderService.cs` 의 `PlaceAsync`
-
-파일 안에 약속(입력·출력)과 단계별 TODO, 힌트가 적혀 있어요.
-`ProductionService.cs` 가 같은 패턴의 완성본이라 OrderService를 쓸 때 참고하면 돼요.
 
 ## 맥에서 처음 실행하기
 
