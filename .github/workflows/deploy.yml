@@ -19,10 +19,15 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: SSH 키 준비
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          # 붙여넣기 과정에서 섞인 윈도우 줄바꿈(\r)을 없애고, 마지막 줄바꿈을 보장
+          printf '%s\n' "$DEPLOY_SSH_KEY" | tr -d '\r' > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+          # 키를 제대로 읽을 수 있는지 먼저 검사 (여기서 실패하면 Secret 값 문제)
+          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null && echo "키 형식 OK"
           ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
 
       - name: 서버 배포
