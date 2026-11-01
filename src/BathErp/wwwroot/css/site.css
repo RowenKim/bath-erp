@@ -33,9 +33,10 @@ button:disabled { opacity: .5; cursor: wait; }
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .grid .card { margin: 0; overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { text-align: left; color: var(--muted); font-weight: 500; padding: 5px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { text-align: center; color: var(--muted); font-weight: 500; padding: 5px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 td { padding: 5px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 .num { text-align: right; font-variant-numeric: tabular-nums; }
+th.num { text-align: center; }   /* 헤더는 숫자 컬럼도 가운데, 행은 오른쪽 정렬 유지 */
 .log-msg { white-space: normal; word-break: keep-all; min-width: 180px; }
 .empty { color: var(--muted); }
 .about { margin-top: 12px; }

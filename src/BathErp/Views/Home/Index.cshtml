@@ -103,7 +103,7 @@
         <section class="card">
             <h2>인터페이스 로그</h2>
             <table>
-                <thead><tr><th>시각</th><th>구분</th><th>결과</th><th>내용</th></tr></thead>
+                <thead><tr><th>일자</th><th>구분</th><th>결과</th><th>내용</th></tr></thead>
                 <tbody>
                 @if (Model.Logs.Count == 0)
                 {
@@ -112,7 +112,7 @@
                 @foreach (var l in Model.Logs)
                 {
                     <tr>
-                        <td>@l.CreatedAt.ToString("MM-dd HH:mm:ss")</td><td>@l.Action</td>
+                        <td>@l.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td><td>@l.Action</td>
                         <td class="res-@l.Result">@l.Result</td>
                         <td class="log-msg">@l.RefNo @l.Message</td>
                     </tr>
