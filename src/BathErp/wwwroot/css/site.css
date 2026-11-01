@@ -38,6 +38,11 @@ td { padding: 5px 6px; border-bottom: 1px solid var(--line); white-space: nowrap
 .num { text-align: right; font-variant-numeric: tabular-nums; }
 .log-msg { white-space: normal; word-break: keep-all; min-width: 180px; }
 .empty { color: var(--muted); }
+.about { margin-top: 12px; }
+.about summary { cursor: pointer; font-weight: 600; }
+.about p { margin: 8px 0 0; line-height: 1.6; }
+.about .muted { color: var(--muted); }
+.about a { color: var(--accent); }
 .res-성공 { color: var(--ok); font-weight: 600; }
 .res-실패 { color: var(--err); font-weight: 600; }
 .res-생산필요 { color: var(--accent); font-weight: 600; }
