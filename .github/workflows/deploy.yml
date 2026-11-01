@@ -1,0 +1,29 @@
+# main 브랜치에 push되면 서버에 자동 배포
+# 서버 쪽에서는 이 키로 접속하면 /root/deploy-bath-erp.sh 만 실행되도록 묶어둠 (authorized_keys 의 command=)
+name: Deploy to server
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:            # README 같은 문서만 바뀌면 배포 안 함
+      - '**.md'
+  workflow_dispatch:         # Actions 탭에서 수동 실행도 가능
+
+concurrency:                 # 연달아 push해도 배포가 겹치지 않게 순서대로
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: SSH 키 준비
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: 서버 배포
+        run: ssh -i ~/.ssh/deploy_key "root@${{ secrets.DEPLOY_HOST }}"

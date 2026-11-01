@@ -4,3 +4,4 @@ obj/
 .vscode/
 *.user
 .DS_Store
+deploy.sh
